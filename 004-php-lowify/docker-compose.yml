@@ -1,0 +1,31 @@
+services:
+  php:
+    build:
+      context: ./docker
+      dockerfile: frankenphp.Dockerfile
+    ports:
+      - "80:80" # HTTP
+      - "443:443" # HTTPS
+      - "443:443/udp" # HTTP/3
+    volumes:
+      - ./app:/app/public
+      - caddy_data:/data
+      - caddy_config:/config
+    tty: true
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lowify
+      MYSQL_USER: lowify
+      MYSQL_PASSWORD: lowifypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  caddy_data:
+  caddy_config:
+  mysql_data:
