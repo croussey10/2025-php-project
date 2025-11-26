@@ -1,36 +1,37 @@
-<?php
+<?php 
 
-$choicePlayer = $_GET['player'] ?? "Faites votre choix";
+$solutions = [
+    'pierre' => ['ciseau', 'lezard'],
+    'feuille' => ['pierre', 'spock'],
+    'ciseau' => ['feuille', 'lezard'],
+    'lezard' => ['ciseau', 'feuille'],
+    'spock' => ['ciseau', 'pierre']
+];
 
-if ($choicePlayer == "Faites votre choix") {
-    $choiceBot = "";
-    $state = "";
+$choicePlayer = $_GET['player'] ?? null;
+$choiceBot = array_rand($solutions);
+
+// $drawStat = 0;
+// $winStat = 0;
+// $loseStat = 0;
+
+if ($choicePlayer == null) {
+    $choiceBot = null;
+    $state = null;
 } else {
-    $choiceBot = rand(0, 2);
-
-    if ($choiceBot == 0)
-        $choiceBot = "pierre";
-    else if ($choiceBot == 1)
-        $choiceBot = "feuille";
-    else
-        $choiceBot = "ciseau";
-
     if ($choicePlayer == $choiceBot) {
         $state = "DRAW";
-    } else if ($choicePlayer == "pierre" && $choiceBot == "ciseau") {
+        // $drawStat += 1;
+    } else if (in_array($choiceBot, $solutions[$choicePlayer])) {
         $state = "WIN";
-    } else if ($choicePlayer == "pierre" && $choiceBot == "feuille") {
+        // $winStat += 1;
+    } else {
         $state = "LOSE";
-    } else if ($choicePlayer == "feuille" && $choiceBot == "pierre") {
-        $state = "WIN";
-    } else if ($choicePlayer == "feuille" && $choiceBot == "ciseau") {
-        $state = "LOSE";
-    } else if ($choicePlayer == "ciseau" && $choiceBot == "feuille") {
-        $state = "WIN";
-    } else if ($choicePlayer == "ciseau" && $choiceBot == "pierre") {
-        $state = "LOSE";
+        // $loseStat += 1;
     }
 }
+
+// echo "DRAW: $drawStat, WIN: $winStat, LOSE: $loseStat";
 
 $html = <<< HTML
 <h1>Jeu Pierre, Feuilles, Ciseaux</h1>
@@ -39,17 +40,19 @@ $html = <<< HTML
     <p>Joueur : $choicePlayer</p>
 </div>
 <div>
-    <p>Php : $choiceBot</p>
+    <p>Bot : $choiceBot</p>
 </div>
 
 <div>
     <p>$state</p>
-</div>
+</div>z
 
 <div>
     <a href="http://localhost:80/?player=pierre">PIERRE</a>
     <a href="http://localhost:80/?player=feuille">FEUILLE</a>
     <a href="http://localhost:80/?player=ciseau">CISEAU</a>
+    <a href="http://localhost:80/?player=lezard">LEZARD</a>
+    <a href="http://localhost:80/?player=spock">SPOCK</a>
 </div>
 
 <div>
@@ -58,4 +61,3 @@ $html = <<< HTML
 HTML;
 
 echo $html;
-
