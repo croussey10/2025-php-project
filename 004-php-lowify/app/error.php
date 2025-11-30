@@ -11,7 +11,6 @@ HTML;
 
 echo (new HTMLPage(title: "Lowify - Error page"))
     ->addContent($html)
-//    ->addContent($songsArtist)
     ->addHead('<meta charset="utf-8" />')
     ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />')
     ->addBodyAttribute("class", "bg-dark text-white p-4")

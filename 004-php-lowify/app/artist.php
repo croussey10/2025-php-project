@@ -40,7 +40,7 @@ SQL);
 }
 
 if ($artists == null) {
-    $errorMessage = "L'artiste avec l'ID $idArtist n'a pas été trouvé.";
+    $errorMessage = "L'artiste avec l'ID $idArtist n'a pas été trouvé";
     header("Location: error.php?message=$errorMessage");
 }
 
@@ -69,7 +69,7 @@ try {
         song.duration,
         album.cover
     FROM song
-             INNER JOIN album ON song.album_id = album.id
+    INNER JOIN album ON song.album_id = album.id
     WHERE song.artist_id = :artistId
     ORDER BY note DESC
     LIMIT 5
@@ -103,6 +103,7 @@ $albums = [];
 try {
     $albums = $db->executeQuery(<<< SQL
     SELECT
+        album.id,
         album.name,
         album.cover,
         album.release_date
@@ -117,13 +118,16 @@ SQL);
 $albumsArtistHtml = "";
 
 foreach ($albums as $album) {
+    $idAlbum = $album["id"];
     $nameAlbumsArtist = $album["name"];
     $coverAlbumsArtist = $album["cover"];
     $dateAlbumsArtist = substr($album["release_date"], 0, 10);
     $albumsArtistHtml .= <<< HTML
-        <p>Album name : $nameAlbumsArtist</p>
-        <p>Date de sortie : $dateAlbumsArtist</p>
-        <img src="$coverAlbumsArtist" width="300" alt="img-cover-album">
+        <a href="album.php?id=$idAlbum" class="text-decoration-none text-white">
+            <p>Album name : $nameAlbumsArtist</p>
+            <p>Date de sortie : $dateAlbumsArtist</p>
+            <img src="$coverAlbumsArtist" width="300" alt="img-cover-album">
+        </a>
         <br>
 HTML;
 }
@@ -146,7 +150,6 @@ HTML;
 
 echo (new HTMLPage(title: "Lowify - Artiste page"))
     ->addContent($html)
-//    ->addContent($songsArtist)
     ->addHead('<meta charset="utf-8" />')
     ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />')
     ->addBodyAttribute("class", "bg-dark text-white p-4")
