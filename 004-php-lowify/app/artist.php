@@ -35,7 +35,13 @@ try {
         WHERE id = $idArtist
 SQL);
 } catch (PDOException $ex) {
-    die("Erreur lors de la requette artists" . $ex->getMessage());
+    $errorMessage = "Erreur lors de la requette artists";
+    header("Location: error.php?message=$errorMessage");
+}
+
+if ($artists == null) {
+    $errorMessage = "L'artiste avec l'ID $idArtist n'a pas été trouvé.";
+    header("Location: error.php?message=$errorMessage");
 }
 
 $artist = $artists[0];
@@ -45,6 +51,13 @@ $artistName = $artist['name'];
 $artistBiography = $artist['biography'];
 $artistCover = $artist['cover'];
 $artistMonthlyListeners = $artist['monthly_listeners'];
+if ($artistMonthlyListeners >= 1000000) {
+    $artistMonthlyListeners = $artistMonthlyListeners / 1000000;
+    $artistMonthlyListeners = number_format($artistMonthlyListeners, 1) . "M";
+} elseif ($artistMonthlyListeners >= 1000) {
+    $artistMonthlyListeners = $artistMonthlyListeners / 1000;
+    $artistMonthlyListeners = number_format($artistMonthlyListeners, 1) . "K";
+}
 
 $songs = [];
 
@@ -53,6 +66,7 @@ try {
         SELECT
         song.name,
         song.note,
+        song.duration,
         album.cover
     FROM song
              INNER JOIN album ON song.album_id = album.id
@@ -69,9 +83,15 @@ $songInfosHtml = "";
 foreach ($songs as $songArtist) {
     $songName = $songArtist['name'];
     $songNote = $songArtist['note'];
+
+    $songDuration = $songArtist['duration'];
+    $minutes = $songDuration / 60;
+    $secondes = $songDuration % 60;
+    $songDuration = sprintf("%d:%02d", $minutes, $secondes);
+
     $albumCover = $songArtist['cover'];
     $songInfosHtml .= <<< HTML
-        <p>$songName NOTE : $songNote</p>
+        <p>$songName NOTE : $songNote DUREE : $songDuration</p>
         <br>
         <img src="$albumCover" width="300" alt="img-cover-album">
         <br>
@@ -83,17 +103,29 @@ $albums = [];
 try {
     $albums = $db->executeQuery(<<< SQL
     SELECT
-        album.id,
-        album.name
+        album.name,
+        album.cover,
+        album.release_date
     FROM album
     WHERE artist_id = $artistId
+    ORDER BY album.release_date DESC
 SQL);
 } catch (PDOException $ex) {
     die("Erreur lors de la requette albums" . $ex->getMessage());
 }
 
+$albumsArtistHtml = "";
+
 foreach ($albums as $album) {
-    echo $album["name"];
+    $nameAlbumsArtist = $album["name"];
+    $coverAlbumsArtist = $album["cover"];
+    $dateAlbumsArtist = substr($album["release_date"], 0, 10);
+    $albumsArtistHtml .= <<< HTML
+        <p>Album name : $nameAlbumsArtist</p>
+        <p>Date de sortie : $dateAlbumsArtist</p>
+        <img src="$coverAlbumsArtist" width="300" alt="img-cover-album">
+        <br>
+HTML;
 }
 
 $html = <<< HTML
@@ -105,10 +137,14 @@ $html = <<< HTML
         <h2>Top 5 songs : </h2>
         $songInfosHtml
     </div>
+    <div>
+        <h2>ALL ALBUM :</h2>
+        $albumsArtistHtml
+    </div>
 HTML;
 
 
-echo (new HTMLPage(title: "Lowify - Artistes"))
+echo (new HTMLPage(title: "Lowify - Artiste page"))
     ->addContent($html)
 //    ->addContent($songsArtist)
     ->addHead('<meta charset="utf-8" />')
