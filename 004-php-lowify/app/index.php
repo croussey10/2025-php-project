@@ -45,20 +45,24 @@ foreach ($artists as $artist) {
     $listenersArtist = $artist["monthly_listeners"];
     $artistsHtml .= <<< HTML
         <div class="col-lg-3 col-md-6 mb-4">
-            <a href="artist.php?id=$idArtist" class="text-decoration-none text-white">
-                <div class="card h-100 bg-dark text-white border-dark shadow">
-                    <h5 class="card-title">$nameArtist</h5>
-                    <img src="$coverArtist" class="card-img-top rounded-circle" width="300" alt="Image 1">
+            <a href="artist.php?id=$idArtist" class="text-decoration-none">
+                <div class="card h-100 p-3">
+                    <img src="$coverArtist" class="card-img-top rounded-circle" alt="Image de l'artiste $nameArtist">
+                    <div class="card-body">
+                        <h5 class="card-title">$nameArtist</h5>
+                        <p class="card-text text-secondary-text">Artiste · $listenersArtist auditeurs</p>
+                    </div>
                 </div>
             </a>
         </div>
 HTML;
 }
+$artistsHtml = "<div class='row'>" . $artistsHtml . "</div>";
 
-$albumsSorties = [];
+$albumsTopSorties = [];
 
 try {
-    $albumsSorties = $db->executeQuery(<<< SQL
+    $albumsTopSorties = $db->executeQuery(<<< SQL
     SELECT
         album.id,
         album.name,
@@ -72,30 +76,33 @@ SQL);
     die("Erreur lors de la requette albums" . $ex->getMessage());
 }
 
-$albumsSortiesHtml = "";
+$albumsTopSortiesHtml = "";
 
-foreach ($albumsSorties as $album) {
-    $idAlbum = $album["id"];
-    $nameAlbumsArtist = $album["name"];
-    $coverAlbumsArtist = $album["cover"];
-    $dateAlbumsArtist = substr($album["release_date"], 0, 10);
-    $albumsSortiesHtml .= <<< HTML
+foreach ($albumsTopSorties as $albumTopSorties) {
+    $idAlbum = $albumTopSorties["id"];
+    $nameAlbum = $albumTopSorties["name"];
+    $coverAlbum = $albumTopSorties["cover"];
+    $dateAlbum = substr($albumTopSorties["release_date"], 0, 10);
+    $albumsTopSortiesHtml .= <<< HTML
         <div class="col-lg-3 col-md-6 mb-4">
-            <a href="album.php?id=$idAlbum" class="text-decoration-none text-white">
-                <div class="card h-100 bg-dark text-white border-dark shadow">
-                    <p>Album name : $nameAlbumsArtist</p>
-                    <p>Date de sortie : $dateAlbumsArtist</p>
-                    <img src="$coverAlbumsArtist" width="300" alt="img-cover-album">
+            <a href="album.php?id=$idAlbum" class="text-decoration-none">
+                <div class="card h-100 p-3">
+                    <img src="$coverAlbum" class="card-img-top" alt="Couverture de l'album $nameAlbum">
+                    <div class="card-body">
+                        <h5 class="card-title">$nameAlbum</h5>
+                        <p class="card-text text-secondary-text">Album · $dateAlbum</p>
+                    </div>
                 </div>
             </a>
         </div>
 HTML;
 }
+$albumsTopSortiesHtml = "<div class='row'>" . $albumsTopSortiesHtml . "</div>";
 
-$albumsTop = [];
+$albumsTopNotes = [];
 
 try {
-    $albumsTop = $db->executeQuery(<<< SQL
+    $albumsTopNotes = $db->executeQuery(<<< SQL
     SELECT
         album.id,
         album.name,
@@ -114,39 +121,63 @@ SQL);
     die("Erreur lors de la requette albums" . $ex->getMessage());
 }
 
-$albumsTopHtml = "";
+$albumsTopNotesHtml = "";
 
-foreach ($albumsTop as $albumTop) {
-    $idAlbum = $albumTop["id"];
-    $nameAlbumsArtist = $albumTop["name"];
-    $coverAlbumsArtist = $albumTop["cover"];
-    $noteAlbumsArtist = number_format($albumTop["note_moyenne"], 2);
-    $albumsTopHtml .= <<< HTML
+foreach ($albumsTopNotes as $albumTopNotes) {
+    $idAlbum = $albumTopNotes["id"];
+    $nameAlbumsArtist = $albumTopNotes["name"];
+    $coverAlbumsArtist = $albumTopNotes["cover"];
+    $noteAlbumsArtist = number_format($albumTopNotes["note_moyenne"], 2);
+    $albumsTopNotesHtml .= <<< HTML
         <div class="col-lg-3 col-md-6 mb-4">
-            <a href="album.php?id=$idAlbum" class="text-decoration-none text-white">
-                <div class="card h-100 bg-dark text-white border-dark shadow">
-                    <p>Album name : $nameAlbumsArtist</p>
-                    <p>Note : $noteAlbumsArtist</p>
-                    <img src="$coverAlbumsArtist" width="300" alt="img-cover-album">
+            <a href="album.php?id=$idAlbum" class="text-decoration-none">
+                <div class="card h-100 p-3">
+                    <img src="$coverAlbumsArtist" class="card-img-top" alt="Couverture de l'album $nameAlbumsArtist">
+                    <div class="card-body">
+                        <h5 class="card-title">$nameAlbumsArtist</h5>
+                        <p class="card-text text-secondary-text">Note: $noteAlbumsArtist / 5</p>
+                    </div>
                 </div>
             </a>
         </div>
 HTML;
 }
+$albumsTopNotesHtml = "<div class='row'>" . $albumsTopNotesHtml . "</div>";
 
 $html = <<< HTML
-    <h2>Top trending :</h2>
-    $artistsHtml
-    <h2>Top sorties :</h2>
-    $albumsSortiesHtml
-    <h2>Top albums :</h2>
-    $albumsTopHtml
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-4">Bienvenue sur LOWIFY</h1>
+        </div>
+        
+        <!-- Barre de recherche (utilise les styles du CSS) -->
+        <form action="search.php" method="GET" class="mb-5 d-flex justify-content-center">
+            <input type="text" name="query" placeholder="Rechercher artistes, albums, ou chansons..." class="form-control me-2" style="max-width: 400px;">
+            <button type="submit" class="btn btn-primary">RECHERCHER</button>
+        </form>
+
+        <section class="mb-5">
+            <h2 class="mb-4">Top Trending Artistes</h2>
+            $artistsHtml
+        </section>
+
+        <section class="mb-5">
+            <h2 class="mb-4">Nouvelles Sorties</h2>
+            $albumsTopSortiesHtml
+        </section>
+        
+        <section class="mb-5">
+            <h2 class="mb-4">Meilleurs Albums (par note)</h2>
+            $albumsTopNotesHtml
+        </section>
+    </div>
 HTML;
 
 
 echo (new HTMLPage(title: "Lowify - Page d'accueil"))
     ->addContent($html)
+    ->addHead('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">')
+    ->addHead('<link rel="stylesheet" href="style.css">')
     ->addHead('<meta charset="utf-8" />')
     ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />')
-    ->addBodyAttribute("class", "bg-dark text-white p-4")
     ->render();

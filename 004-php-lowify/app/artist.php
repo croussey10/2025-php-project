@@ -80,16 +80,16 @@ SQL, ["artistId" => $artistId]);
 
 $songInfosHtml = "";
 
-foreach ($songs as $songArtist) {
-    $songName = $songArtist['name'];
-    $songNote = $songArtist['note'];
+foreach ($songs as $song) {
+    $songName = $song['name'];
+    $songNote = $song['note'];
 
-    $songDuration = $songArtist['duration'];
+    $songDuration = $song['duration'];
     $minutes = $songDuration / 60;
     $secondes = $songDuration % 60;
     $songDuration = sprintf("%d:%02d", $minutes, $secondes);
 
-    $albumCover = $songArtist['cover'];
+    $albumCover = $song['cover'];
     $songInfosHtml .= <<< HTML
         <p>$songName NOTE : $songNote DUREE : $songDuration</p>
         <br>
