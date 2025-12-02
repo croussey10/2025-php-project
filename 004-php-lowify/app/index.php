@@ -3,6 +3,8 @@
 require_once __DIR__ . '/inc/page.inc.php';
 require __DIR__ . '/inc/database.inc.php';
 
+// Connexion à la BDD
+
 $host = "mysql";
 $dbname = "lowify";
 $username = "lowify";
@@ -19,6 +21,8 @@ try {
     die("Error connecting to database" . $ex->getMessage());
 }
 
+// Récupération des artistes
+
 $artists = [];
 
 try {
@@ -31,10 +35,13 @@ try {
     FROM artist
     ORDER BY monthly_listeners DESC
     LIMIT 5
-SQL);
+SQL
+    );
 } catch (PDOException $ex) {
     die("Erreur lors de la requette " . $ex->getMessage());
 }
+
+// Affichage des artistes
 
 $artistsHtml = "";
 
@@ -59,6 +66,8 @@ HTML;
 }
 $artistsHtml = "<div class='row'>" . $artistsHtml . "</div>";
 
+// Récupération des albums et affichage des 5 albums les mieux notés
+
 $albumsTopSorties = [];
 
 try {
@@ -71,7 +80,8 @@ try {
     FROM album
     ORDER BY album.release_date DESC
     LIMIT 5
-SQL);
+SQL
+    );
 } catch (PDOException $ex) {
     die("Erreur lors de la requette albums" . $ex->getMessage());
 }
@@ -99,6 +109,8 @@ HTML;
 }
 $albumsTopSortiesHtml = "<div class='row'>" . $albumsTopSortiesHtml . "</div>";
 
+// Récupération des albums et affichage des 5 albums avec la moyenne des sons les plus haute
+
 $albumsTopNotes = [];
 
 try {
@@ -116,7 +128,8 @@ try {
         album.cover
     ORDER BY AVG(song.note) DESC
     LIMIT 5
-SQL);
+SQL
+    );
 } catch (PDOException $ex) {
     die("Erreur lors de la requette albums" . $ex->getMessage());
 }
@@ -144,6 +157,8 @@ HTML;
 }
 $albumsTopNotesHtml = "<div class='row'>" . $albumsTopNotesHtml . "</div>";
 
+// Rendu html
+
 $html = <<< HTML
     <div class="container py-5">
         <div class="text-center mb-5">
@@ -169,6 +184,11 @@ $html = <<< HTML
         <section class="mb-5">
             <h2 class="mb-4">Meilleurs Albums (par note)</h2>
             $albumsTopNotesHtml
+        </section>
+        <section class="mb-5">
+            <h2>
+                <a href="artists.php">Tous les artists</a>
+            </h2>
         </section>
     </div>
 HTML;

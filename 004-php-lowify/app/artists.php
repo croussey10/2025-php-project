@@ -3,16 +3,6 @@
 require_once __DIR__ . '/inc/page.inc.php';
 require __DIR__ . '/inc/database.inc.php';
 
-$rawCSS = <<< CSS
-h1{
-    color: red;
-}
-CSS;
-
-$rawJS = <<< JS
-document.addEventListener("load", () => window.alert("hi"));
-JS;
-
 $host = "mysql";
 $dbname = "lowify";
 $username = "lowify";
@@ -38,7 +28,8 @@ try {
         name,
         cover
     FROM artist
-SQL);
+SQL
+    );
 } catch (PDOException $ex) {
     die("Erreur lors de la requette " . $ex->getMessage());
 }

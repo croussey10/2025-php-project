@@ -33,7 +33,8 @@ try {
             monthly_listeners
         FROM artist
         WHERE id = $idArtist
-SQL);
+SQL
+    );
 } catch (PDOException $ex) {
     $errorMessage = "Erreur lors de la requette artists";
     header("Location: error.php?message=$errorMessage");
@@ -79,6 +80,7 @@ SQL, ["artistId" => $artistId]);
 }
 
 $songInfosHtml = "";
+$songRank = 1;
 
 foreach ($songs as $song) {
     $songName = $song['name'];
@@ -91,11 +93,18 @@ foreach ($songs as $song) {
 
     $albumCover = $song['cover'];
     $songInfosHtml .= <<< HTML
-        <p>$songName NOTE : $songNote DUREE : $songDuration</p>
-        <br>
-        <img src="$albumCover" width="300" alt="img-cover-album">
-        <br>
+        <div class="top-songs d-flex justify-content-between align-items-center p-2 mb-2">
+            <!-- Numéro et Nom de la chanson -->
+            <span class="d-flex align-items-center">
+                <span class="text-secondary-text me-3" style="width: 20px; text-align: right;">$songRank</span>
+                <span>$songName</span>
+            </span>
+            <!-- Durée et Note -->
+            <span class="text-secondary-text d-none d-md-block">$songDuration &nbsp;|&nbsp; Note: $songNote/5</span>
+        </div>
+    
 HTML;
+    $songRank++;
 }
 
 $albums = [];
@@ -110,7 +119,8 @@ try {
     FROM album
     WHERE artist_id = $artistId
     ORDER BY album.release_date DESC
-SQL);
+SQL
+    );
 } catch (PDOException $ex) {
     die("Erreur lors de la requette albums" . $ex->getMessage());
 }
@@ -123,33 +133,61 @@ foreach ($albums as $album) {
     $coverAlbumsArtist = $album["cover"];
     $dateAlbumsArtist = substr($album["release_date"], 0, 10);
     $albumsArtistHtml .= <<< HTML
-        <a href="album.php?id=$idAlbum" class="text-decoration-none text-white">
-            <p>Album name : $nameAlbumsArtist</p>
-            <p>Date de sortie : $dateAlbumsArtist</p>
-            <img src="$coverAlbumsArtist" width="300" alt="img-cover-album">
-        </a>
-        <br>
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <a href="album.php?id=$idAlbum" class="text-decoration-none">
+                <div class="card h-100 p-3">
+                    <img src="$coverAlbumsArtist" class="card-img-top" alt="Couverture de l'album $nameAlbumsArtist">
+                    <div class="card-body">
+                        <h5 class="card-title">$nameAlbumsArtist</h5>
+                        <p class="card-text text-secondary-text">Album · $dateAlbumsArtist</p>
+                    </div>
+                </div>
+            </a>
+        </div>
 HTML;
 }
 
 $html = <<< HTML
-    <h1>$artistName</h1>
-    <h2>$artistBiography</h2>
-    <img src="$artistCover" width="300" alt="cover-artist">
-    <p>Nombre d'écoutes mensuels : $artistMonthlyListeners</p>
-    <div>
-        <h2>Top 5 songs : </h2>
-        $songInfosHtml
+    <div class="container-fluid">
+        <a href="index.php">< Retour à l'accueil</a>
+        <!-- HEADER ARTISTE (Style Spotify) -->
+        <!-- Le background simule la couleur de l'artiste + dégradé vers le fond sombre -->
+        <div class="artist-header p-5 d-flex align-items-end" style="background: linear-gradient(to bottom, #1ed76044, #121212);">
+            <img src="$artistCover" class="artist-cover" alt="Couverture de l'artiste $artistName">
+            <div class="artist-info ms-4">
+                <h1 class="display-1 fw-bold">$artistName</h1>
+                <h2 class="mb-3">Biographie</h2>
+                <p>$artistBiography</p>
+                <p class="text-secondary-text fw-bold"> $artistMonthlyListeners auditeurs mensuels</p>
+            </div>
+        </div>
     </div>
-    <div>
-        <h2>ALL ALBUM :</h2>
-        $albumsArtistHtml
+
+    <div class="container py-5">
+        
+        <!-- TOP 5 CHANSONS -->
+        <section class="mb-5">
+            <h2 class="mb-4">Top 5 des chansons populaires</h2>
+            <div class="list-unstyled">
+                $songInfosHtml
+            </div>
+        </section>
+        
+        <!-- TOUS LES ALBUMS -->
+        <section class="mb-5">
+            <h2 class="mb-4">Discographie</h2>
+            <div class="row">
+                $albumsArtistHtml
+            </div>
+        </section>
     </div>
 HTML;
 
 
-echo (new HTMLPage(title: "Lowify - Artiste page"))
+echo (new HTMLPage(title: "Lowify - $artistName"))
     ->addContent($html)
+    ->addHead('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">')
+    ->addHead('<link rel="stylesheet" href="style.css">')
     ->addHead('<meta charset="utf-8" />')
     ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />')
     ->addBodyAttribute("class", "bg-dark text-white p-4")
