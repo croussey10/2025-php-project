@@ -57,6 +57,7 @@ HTML;
 }
 
 $html = <<< HTML
+    <a href="index.php" class="text-decoration-underline">< Retour à l'accueil</a>
     <div class="container py-5">
         <h1 class="mb-5">Tous les artistes</h1>
         <div class="row">

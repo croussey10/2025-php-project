@@ -154,7 +154,7 @@ HTML;
 
 $html = <<< HTML
     <div class="container-fluid p-4">
-        <a href="index.php">< Retour à l'accueil</a>
+        <a href="index.php" class="text-decoration-underline">< Retour à l'accueil</a>
         <form action="search.php" method="GET" class="mb-5 d-flex justify-content-center">
             <input type="text" name="query" placeholder="Nouvelle recherche..." class="form-control me-2" value="$query" style="max-width: 400px;">
             <button type="submit" class="btn btn-primary">RECHERCHER</button>

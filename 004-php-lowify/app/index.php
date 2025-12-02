@@ -49,7 +49,15 @@ foreach ($artists as $artist) {
     $idArtist = $artist["id"];
     $nameArtist = $artist["name"];
     $coverArtist = $artist["cover"];
-    $listenersArtist = $artist["monthly_listeners"];
+    $artistMonthlyListeners = $artist["monthly_listeners"];
+    $artistMonthlyListeners = $artist['monthly_listeners'];
+    if ($artistMonthlyListeners >= 1000000) {
+        $artistMonthlyListeners = $artistMonthlyListeners / 1000000;
+        $artistMonthlyListeners = number_format($artistMonthlyListeners, 1) . "M";
+    } elseif ($artistMonthlyListeners >= 1000) {
+        $artistMonthlyListeners = $artistMonthlyListeners / 1000;
+        $artistMonthlyListeners = number_format($artistMonthlyListeners, 1) . "K";
+    }
     $artistsHtml .= <<< HTML
         <div class="col-lg-3 col-md-6 mb-4">
             <a href="artist.php?id=$idArtist" class="text-decoration-none">
@@ -57,7 +65,7 @@ foreach ($artists as $artist) {
                     <img src="$coverArtist" class="card-img-top rounded-circle" alt="Image de l'artiste $nameArtist">
                     <div class="card-body">
                         <h5 class="card-title">$nameArtist</h5>
-                        <p class="card-text text-secondary-text">Artiste · $listenersArtist auditeurs</p>
+                        <p class="card-text text-secondary-text">Artiste · $artistMonthlyListeners auditeurs</p>
                     </div>
                 </div>
             </a>
@@ -187,7 +195,7 @@ $html = <<< HTML
         </section>
         <section class="mb-5">
             <h2>
-                <a href="artists.php">Tous les artists</a>
+                <a href="artists.php" class="text-decoration-underline">Afficher Tous les artists</a>
             </h2>
         </section>
     </div>

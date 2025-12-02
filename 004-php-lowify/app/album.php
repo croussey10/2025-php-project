@@ -59,9 +59,13 @@ $idArtist = $album["artist_id"];
 $dateAlbumsArtist = substr($album["release_date"], 0, 10);
 
 $albumInfos = <<< HTML
-    <a href="index.php">< Retour à l'accueil</a>
+    <a href="index.php" class="text-secondary-text text-decoration-none">< Retour à l'accueil</a>
     <br>
-    <a href="artist.php?id='$idArtist'">$nameArtist</a>
+    
+    <h3 class="mb-3">
+        <a href="artist.php?id='$idArtist'" class="text-white text-decoration-underline">$nameArtist</a>
+    </h3>
+    
     <div class="album-header d-flex align-items-end p-4 mb-4">
         <img src="$coverAlbumsArtist" class="album-cover img-fluid me-4 rounded shadow-lg" width="300" alt="Couverture de l'album: $nameAlbumsArtist">
         

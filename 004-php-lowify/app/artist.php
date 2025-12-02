@@ -149,7 +149,7 @@ HTML;
 
 $html = <<< HTML
     <div class="container-fluid">
-        <a href="index.php">< Retour à l'accueil</a>
+        <a href="index.php" class="text-decoration-underline">< Retour à l'accueil</a>
         <!-- HEADER ARTISTE (Style Spotify) -->
         <!-- Le background simule la couleur de l'artiste + dégradé vers le fond sombre -->
         <div class="artist-header p-5 d-flex align-items-end" style="background: linear-gradient(to bottom, #1ed76044, #121212);">
