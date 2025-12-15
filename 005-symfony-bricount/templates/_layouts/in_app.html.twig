@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>template in_app</h1>
+
+        {# menu #}
+        {% include '_components/menu.html.twig' %}
+
+        {# contenu #}
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}

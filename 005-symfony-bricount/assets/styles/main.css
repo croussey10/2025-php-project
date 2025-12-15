@@ -1,0 +1,136 @@
+/* --- Mise en page et Conteneur du formulaire --- */
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #2c3e50;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #ecf0f1;
+    font-size: 1.1rem;
+    padding: 8px 15px;
+    display: block;
+    transition: color 0.3s ease, background-color 0.3s ease, border-bottom 0.3s ease;
+    border-radius: 4px;
+}
+
+nav ul li a:hover {
+    color: #3498db;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+nav ul li a.active {
+    color: #e74c3c;
+    font-weight: bold;
+    border-bottom: 3px solid #e74c3c;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre horizontalement le contenu */
+    justify-content: center; /* Centre verticalement le contenu */
+    min-height: 100vh; /* Prend toute la hauteur de la fenêtre */
+    background-color: #f4f7f6; /* Fond très clair pour le corps de la page */
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px; /* Limite la largeur du formulaire */
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre douce pour un effet flottant */
+    text-align: center;
+}
+
+/* --- Styles du titre et des messages --- */
+.login-card h1 {
+    margin-bottom: 25px;
+    font-size: 2rem;
+    color: #333;
+}
+
+.login-card .alert-danger {
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #e74c3c; /* Votre rouge d'alerte */
+    color: white;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+/* --- Styles des champs de formulaire --- */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block; /* La balise label prend toute la largeur */
+    margin-bottom: 5px;
+    font-weight: 600; /* Plus de gras */
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* S'assure que padding n'augmente pas la taille */
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #3498db; /* Bleu au focus */
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    outline: none; /* Supprime l'outline par défaut du navigateur */
+}
+
+/* --- Style du bouton de soumission --- */
+.btn-primary {
+    width: 100%; /* Bouton pleine largeur */
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2ecc71; /* Un beau vert pour l'action principale */
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #27ae60; /* Vert légèrement plus foncé au survol */
+}

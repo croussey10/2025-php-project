@@ -1,0 +1,19 @@
+{% set current_route = app.current_route %}
+
+<nav>
+    <ul>
+        <li>
+            <a href="{{ path("wallets_list") }}"
+               class="{% if "wallets" in current_route %}active{% endif %}">Wallets</a>
+        </li>
+        <li>
+            <a href="{{ path("settings") }}" class="{% if "settings" in current_route %}active{% endif %}">Settings</a>
+        </li>
+        <li>
+            <div>
+                Utilisateur : {{ app.user.email }}
+            </div>
+            <a href="{{ path("app_logout") }}">Déconnexion</a>
+        </li>
+    </ul>
+</nav>
