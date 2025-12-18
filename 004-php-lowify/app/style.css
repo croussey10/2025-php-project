@@ -1,0 +1,216 @@
+/* * Style inspiré de Spotify pour l'application LOWIFY.
+ * Ce fichier est conçu pour compléter et surcharger les classes Bootstrap.
+ */
+
+:root {
+    /* Couleurs principales de Spotify */
+    --color-black: #121212;
+    --color-dark-grey: #181818;
+    --color-medium-grey: #282828;
+    --color-light-grey: #b3b3b3;
+    --color-white: #ffffff;
+    --color-green: #1ed760;
+    --color-primary-text: var(--color-white);
+    --color-secondary-text: var(--color-light-grey);
+}
+
+/* 1. Fond de page et conteneur principal */
+body {
+    background-color: var(--color-black) !important; /* Fond très sombre, plus Spotify que le 'bg-dark' standard */
+    color: var(--color-primary-text) !important;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Police claire et moderne */
+    padding: 0 !important; /* On retire le padding global de Bootstrap pour un design full-width */
+    min-height: 100vh;
+}
+
+/* 2. Typographie et titres */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-primary-text);
+    font-weight: 700; /* Gras pour les titres */
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 1.5rem; /* Taille standard pour les sections (Top trending, etc.) */
+    padding-left: 1rem;
+}
+
+p {
+    color: var(--color-secondary-text);
+}
+
+/* 3. Cartes d'artiste/album (effet au survol) */
+.card {
+    background-color: var(--color-dark-grey) !important;
+    border: none !important;
+    border-radius: 8px !important; /* Coins arrondis */
+    padding: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    background-color: var(--color-medium-grey) !important; /* S'assombrit légèrement au survol */
+    transform: translateY(-2px); /* Petit effet de soulèvement */
+}
+
+/* Contenu de la carte */
+.card-body {
+    background-color: transparent !important;
+    padding: 0.5rem 0 0 0;
+    text-align: center;
+}
+
+.card-title {
+    color: var(--color-primary-text) !important;
+    font-weight: 600;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+}
+
+/* Images de couverture */
+.card-img-top {
+    width: 100%;
+    max-width: 300px; /* Conservez la largeur max si c'est pour l'aperçu */
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Ombre pour l'effet de profondeur */
+}
+
+/* Images d'artiste (rondes) */
+.rounded-circle {
+    border-radius: 50% !important; /* Assure que les artistes sont bien ronds */
+}
+
+/* 4. Liens et Texte */
+a {
+    color: var(--color-primary-text) !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-green) !important; /* Changement de couleur au survol, typique de Spotify */
+}
+
+/* Pour les liens dans les cartes */
+.text-decoration-none.text-white {
+    color: var(--color-primary-text) !important;
+}
+
+/* 5. Barre de recherche (index.php) */
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+/* 4. (NOUVEAU) Styles des Formulaires et Champs de Saisie (Input) */
+/* Rendre le texte blanc pour qu'il soit lisible sur le fond sombre */
+input[type="text"], input[type="search"], input:not([type="submit"]), .form-control {
+    /* Couleur du texte blanc pour résoudre le problème de visibilité */
+    color: var(--color-white) !important;
+    /* Fond sombre pour s'intégrer au thème */
+    background-color: var(--color-medium-grey) !important;
+    /* Bordure subtile et sombre */
+    border: 1px solid var(--color-medium-grey) !important;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+/* Style au focus pour l'accessibilité et le feedback visuel */
+input[type="text"]:focus, input[type="search"]:focus, .form-control:focus {
+    color: var(--color-white) !important;
+    background-color: var(--color-medium-grey) !important;
+    border-color: var(--color-green) !important; /* Bordure verte au focus (couleur principale) */
+    box-shadow: 0 0 0 0.25rem rgba(30, 215, 96, 0.25) !important; /* Ombre verte subtile */
+}
+
+/* Couleur du placeholder (texte "rechercher...") */
+input::placeholder, .form-control::placeholder {
+    color: var(--color-light-grey) !important; /* Gris clair pour le placeholder */
+    opacity: 0.7;
+}
+
+button[type="submit"] {
+    background-color: var(--color-green);
+    color: var(--color-black);
+    font-weight: 700;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #26e66c; /* Vert légèrement plus clair */
+    transform: scale(1.02);
+}
+
+/* 6. Mise en page générale des sections */
+.row {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.col-lg-3, .col-md-6 {
+    padding: 1rem; /* Ajouter un peu d'espace autour des cartes */
+}
+
+/* 7. Page Artiste spécifique (artist.php) */
+
+/* Conteneur principal de la page artiste */
+.artist-header {
+    display: flex;
+    align-items: flex-end;
+    padding: 2rem 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), var(--color-dark-grey));
+    margin-bottom: 2rem;
+}
+
+.artist-cover {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    margin-right: 2rem;
+}
+
+.artist-info h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.artist-info p {
+    font-weight: 600;
+    color: var(--color-light-grey);
+}
+
+/* Styles pour les top 5 chansons */
+.top-songs p {
+    background-color: var(--color-dark-grey);
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+/* Conteneur pour l'image de la chanson/album dans la liste (s'il y en a) */
+.top-songs img {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
